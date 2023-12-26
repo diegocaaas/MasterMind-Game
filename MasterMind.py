@@ -1,15 +1,16 @@
-import random
+import random 
 
 class MasterMind:
     
     def __init__(self):
        self.TotalAttempts = 0
-       self.Code = self.generateCode()
+       self.Code = []
        self.WinStatus = False
        self.LoseStatus = False
+       self.generateCode()
 
     def generateCode(self):
-        ColorsList = ["GREEN", "RED", "BLUE", "YELLOW", "BROWN", "ORANGE"]
+        ColorsList = ["green", "red", "blue", "yellow", "brown", "orange"]
         Code = []
         for i in range(4):
             Code.append(random.choice(ColorsList))
@@ -22,10 +23,14 @@ class MasterMind:
             if self.Code[index] in Guess:
                 if Guess[index] == self.Code[index]:
                     blacks += 1
+                    Guess[index] = "CHECKED"
                 else:
+                    for index2 in range(len(self.Code)):
+                        if self.Code[index] == Guess[index2]:
+                            Guess[index2] = "CHECKED"
+                            break
                     whites += 1
-                Guess[index] = "CHECKED"
-        
+                print(Guess)                
         if blacks == 4:
             self.WinStatus = True
         elif self.TotalAttempts == 10:
@@ -40,7 +45,7 @@ class MasterMind:
     
     def restartGame(self):
         self.TotalAttempts = 0
-        self.Code = self.generateCode()
+        self.generateCode()
         self.WinStatus = False
         self.LoseStatus = False
     
