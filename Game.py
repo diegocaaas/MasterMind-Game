@@ -4,7 +4,8 @@ from MasterMind import MasterMind
 app = tk.Tk()
 app.title("MasterMind")
 Board = tk.Canvas(app,bg="beige")
-Board.place(height=615, width = 300)
+Board.place(height=615, width=300 )
+app.geometry("300x615")
 
 game = MasterMind()
 column = 0
@@ -33,7 +34,7 @@ def color_button_click(color):
     global rowfilled
     global Guess
     global game
-    if not rowfilled:
+    if not rowfilled and not game.LoseStatus:
         Guess.append(color)
         Board.itemconfig(circleList[game.TotalAttempts][column], fill=color)
         if column == 3:
@@ -46,7 +47,7 @@ def check_button_click():
     global game
     global Guess
     global column
-    if rowfilled:
+    if rowfilled and not game.LoseStatus:
         blacks,whites = game.checkAttempt(Guess)
         i=0
         while(i<blacks):
@@ -56,6 +57,11 @@ def check_button_click():
         while(j<whites):
             Board.itemconfig(responseCircleList[game.TotalAttempts-1][j+i], fill="white")
             j += 1
+        
+        if game.WinStatus:
+            winStatusLabel.config(winStatusLabel, text="YOU WON")
+        elif game.LoseStatus:
+            winStatusLabel.config(winStatusLabel, text="YOU LOST")
         column = 0
         rowfilled = 0
         Guess = []
@@ -86,6 +92,7 @@ def new_game_click():
             Board.itemconfig(circleList[i][j], fill="white")
             Board.itemconfig(responseCircleList[i][j], fill="lightgrey")
     column = 0
+    winStatusLabel.config(winStatusLabel, text="")
     game.restartGame()
 
    
@@ -102,7 +109,7 @@ brownButton.place(height=25, width=25, x=130, y= 550)
 orangeButton = tk.Button(Board, background="orange", command=lambda: color_button_click("orange"))
 orangeButton.place(height=25, width=25, x=160, y= 550)
 
-ColorLabel = tk.Label(Board,text="Choose Colour",bg="White")
+ColorLabel = tk.Label(Board,text="Choose Colour")
 ColorLabel.place(x=50,y=525)
 
 CheckButton = tk.Button(Board,text="Check", command=check_button_click)
@@ -113,5 +120,9 @@ ClearButton.place(x=25,y=580)
 
 newGameButton = tk.Button(Board, text="New Game", command=new_game_click)
 newGameButton.place(x=125,y=580)
+
+winStatusLabel = tk.Label(Board, text="")
+winStatusLabel.place(x=200,y=525) 
+
 
 app.mainloop()

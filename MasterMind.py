@@ -29,8 +29,7 @@ class MasterMind:
                         if self.Code[index] == Guess[index2]:
                             Guess[index2] = "CHECKED"
                             break
-                    whites += 1
-                print(Guess)                
+                    whites += 1                
         if blacks == 4:
             self.WinStatus = True
         elif self.TotalAttempts == 10:
